@@ -1,13 +1,69 @@
 import "../assets/styles/Profile.css";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import { fetchUserProfile, updateUserName } from "../redux/userSlice";
 
 export default function Profile() {
+  const dispatch = useDispatch();
+  const token = useSelector((state) => state.auth.token);
+  const { firstName, lastName } = useSelector((state) => state.user);
+
+  const [editMode, setEditMode] = useState(false);
+  const [newFirstName, setNewFirstName] = useState("");
+  const [newLastName, setNewLastName] = useState("");
+
+  useEffect(() => {
+    if (token) {
+      dispatch(fetchUserProfile(token));
+    }
+  }, [token]);
+
+  const handleEdit = () => {
+    setNewFirstName(firstName);
+    setNewLastName(lastName);
+    setEditMode(true);
+  };
+
+  const handleSave = () => {
+    dispatch(updateUserName({ token, firstName: newFirstName, lastName: newLastName }));
+    setEditMode(false);
+  };
+
+  const handleCancel = () => {
+    setEditMode(false);
+  };
+
   return (
     <main className="main bg-dark">
       <div className="header">
-        <h1>
-          Welcome back<br />Tony Jarvis!
-        </h1>
-        <button className="edit-button">Edit Name</button>
+        {!editMode ? (
+          <>
+            <h1>
+              Welcome back<br />{firstName} {lastName}!
+            </h1>
+            <button className="edit-button" onClick={handleEdit}>Edit Name</button>
+          </>
+        ) : (
+          <div className="edit-name-form">
+            <h1>Edit your name</h1>
+            <div className="edit-fields">
+              <input
+                type="text"
+                value={newFirstName}
+                onChange={(e) => setNewFirstName(e.target.value)}
+              />
+              <input
+                type="text"
+                value={newLastName}
+                onChange={(e) => setNewLastName(e.target.value)}
+              />
+            </div>
+            <div className="edit-actions">
+              <button className="edit-button" onClick={handleSave}>Save</button>
+              <button className="edit-button" onClick={handleCancel}>Cancel</button>
+            </div>
+          </div>
+        )}
       </div>
 
       <h2 className="sr-only">Accounts</h2>

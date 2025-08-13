@@ -14,7 +14,7 @@ paths:
       tags:
         - User Module
       summary: Login
-      description: API for Login
+      description: API for Login, carabistouille
       parameters:
         - in: body
           name: body
@@ -103,7 +103,7 @@ paths:
         - application/json
       responses:
         '200':
-          description: User profile retrieved successully
+          description: User profile updated successfully
           schema:
             $ref: '#/definitions/ApiResponse'
         '400':
@@ -143,15 +143,25 @@ definitions:
     properties:
       status:
         type: integer
+        example: 200
       message:
         type: string
+        example: "Successfully updated user profile"
       body:
         type: object
         properties:
           id:
             type: string
+            example: "abc123"
           email:
             type: string
+            example: "tony@stark.com"
+          firstName:
+            type: string
+            example: "Tony"
+          lastName:
+            type: string
+            example: "Stark"
   LoginResponse:
     type: object
     properties:
@@ -162,5 +172,7 @@ definitions:
     properties:
       firstName:
         type: string
+        example: "Tony"
       lastName:
         type: string
+        example: "Stark"

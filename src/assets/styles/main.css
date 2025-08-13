@@ -6,6 +6,12 @@ html {
   color: #2c3e50;
 }
 
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
 body {
   margin: 0;
   display: flex;
@@ -14,7 +20,11 @@ body {
 }
 
 .main {
-  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  flex-direction: column;
+  flex-grow: 1;
 }
 
 .bg-dark {
