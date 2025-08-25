@@ -17,7 +17,7 @@ export const loginUser = createAsyncThunk(
       const data = await response.json();
 
       if (response.ok) {
-        return data.body; // { token: "..." }
+        return data.body;
       } else {
         return thunkAPI.rejectWithValue(data.message || "Invalid credentials");
       }
@@ -53,6 +53,32 @@ export const fetchUserProfile = createAsyncThunk(
   }
 );
 
+export const updateUserProfile = createAsyncThunk(
+  "auth/updateUserProfile",
+  async (updatedData, thunkAPI) => {
+    try {
+      const token = thunkAPI.getState().auth.token;
+      const response = await fetch("http://localhost:3001/api/v1/user/profile", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(updatedData),
+      });
+      const data = await response.json();
+
+      if (response.ok) {
+        return data.body; // contient le profil mis à jour
+      } else {
+        return thunkAPI.rejectWithValue(data.message || "Update failed");
+      }
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message || "Network error");
+    }
+  }
+);
+
 // Initialisation du token depuis localStorage
 const initialToken = localStorage.getItem("token");
 
@@ -63,7 +89,7 @@ const authSlice = createSlice({
     firstName: null,
     lastName: null,
     email: null,
-    status: "idle", // 'idle' | 'loading' | 'succeeded' | 'failed'
+    status: "idle",
     error: null,
   },
   reducers: {
@@ -93,6 +119,12 @@ const authSlice = createSlice({
       .addCase(loginUser.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload;
+      })
+
+      .addCase(updateUserProfile.fulfilled, (state, action) => {
+        // Met à jour directement Redux → NavBar se mettra à jour automatiquement
+        state.firstName = action.payload.firstName;
+        state.lastName = action.payload.lastName;
       })
 
       // FETCH PROFILE

@@ -16,7 +16,7 @@ export default function Profile() {
     if (token) {
       dispatch(fetchUserProfile(token));
     }
-  }, [token]);
+  }, [token, dispatch]);
 
   const handleEdit = () => {
     setNewFirstName(firstName);

@@ -1,6 +1,6 @@
 import "../assets/styles/Login.css";
 import { useDispatch, useSelector } from "react-redux";
-import { loginUser, fetchUserProfile } from "../redux/authSlice"; // <-- ajout fetchUserProfile
+import { loginUser, fetchUserProfile } from "../redux/authSlice";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 

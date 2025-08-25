@@ -5,8 +5,7 @@ import "../assets/styles/NavBar.css";
 
 export default function NavBar() {
   const token = useSelector((state) => state.auth.token);
-  const firstName = useSelector((state) => state.auth.firstName);
-  const lastName = useSelector((state) => state.auth.lastName);
+  const { firstName, lastName } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
